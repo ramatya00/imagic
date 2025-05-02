@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model, connected to Clerk for authentication
+model User {
+  id           String        @id @default(cuid())
+  clerkId      String        @unique // External ID from Clerk
+  email        String        @unique
+  username     String?
+  imageUrl     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  limitUsage   Int           @default(0) // Current usage
+  limitMax     Int           @default(25) // Maximum allowed generations per day
+  limitResetAt DateTime?     // When the limit resets
+  images       Image[]       // Images created by user
+  bookmarks    Bookmark[]    // Images bookmarked by user
+  collections  Collection[]  // Collections created by user
+
+  @@index([clerkId])
+}
+
+// Generated image model
+model Image {
+  id              String      @id @default(cuid())
+  prompt          String      @db.Text // The text prompt used to generate the image
+  negativePrompt  String?     @db.Text // Optional negative prompt
+  colorScheme     String?     // Color scheme used (from your defined list)
+  orientation     String      // Landscape, portrait, or square with dimensions
+  guidanceScale   Float       @default(7.5) // AI guidance scale (0-10)
+  seed            BigInt?     // Seed number for reproducibility
+  imageUrl        String      // URL to the image in Supabase storage
+  storageKey      String      // Storage key in Supabase
+  published       Boolean     @default(false) // If published to feeds
+  title           String?     // Optional title for the image
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  userId          String      // Foreign key to User
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookmarks       Bookmark[]  // Users who bookmarked this image
+  collections     CollectionImage[] // Collections this image belongs to
+
+  @@index([userId])
+  @@index([published])
+  @@index([createdAt])
+}
+
+// Bookmark model for saved images
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String   // User who created the bookmark
+  imageId   String   // Image that was bookmarked
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  image     Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, imageId]) // Each user can bookmark an image only once
+  @@index([userId])
+  @@index([imageId])
+}
+
+// Collection model for organizing saved images
+model Collection {
+  id          String            @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images      CollectionImage[]
+
+  @@index([userId])
+}
+
+// Many-to-many relationship between Collections and Images
+model CollectionImage {
+  id           String     @id @default(cuid())
+  collectionId String
+  imageId      String
+  addedAt      DateTime   @default(now())
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  image        Image      @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, imageId])
+  @@index([collectionId])
+  @@index([imageId])
+}
