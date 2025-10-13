@@ -49,7 +49,7 @@ export async function canGenerate(): Promise<{
             ? "No credits remaining. Please purchase more."
             : undefined,
       };
-    } catch (error) {
+    } catch {
       return {
         allowed: false,
         isGuest: false,

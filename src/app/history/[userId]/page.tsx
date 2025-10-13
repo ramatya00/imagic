@@ -67,12 +67,12 @@ export default function HistoryPage() {
 
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleNextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDownload = async (url: string, prompt: string) => {
@@ -81,17 +81,19 @@ export default function HistoryPage() {
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = blobUrl;
-      link.download = `${prompt.slice(0, 50).replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.png`;
+      link.download = `${prompt
+        .slice(0, 50)
+        .replace(/[^a-z0-9]/gi, "_")}_${Date.now()}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Failed to download image. Please try again.');
+      console.error("Download failed:", error);
+      alert("Failed to download image. Please try again.");
     }
   };
 
@@ -101,8 +103,8 @@ export default function HistoryPage() {
       setCopyURL(true);
       setTimeout(() => setCopyURL(false), 3000);
     } catch (error) {
-      console.error('Copy failed:', error);
-      alert('Failed to copy URL. Please try again.');
+      console.error("Copy failed:", error);
+      alert("Failed to copy URL. Please try again.");
     }
   };
 
@@ -111,13 +113,13 @@ export default function HistoryPage() {
       <div className="flex items-center justify-center h-full">
         <Loader message="Loading your history..." />
       </div>
-    )
+    );
   }
 
   if (!images || images.length === 0) {
     return (
       <div className="text-center py-10">
-        <p>You haven't generated any images yet.</p>
+        <p>You haven&apos;t generated any images yet.</p>
       </div>
     );
   }
@@ -128,7 +130,8 @@ export default function HistoryPage() {
         {/* Page Info */}
         <div className="flex justify-between items-center">
           <p className="text-sm text-zinc-400">
-            Showing {startIndex + 1}-{Math.min(endIndex, images.length)} of {images.length} images
+            Showing {startIndex + 1}-{Math.min(endIndex, images.length)} of{" "}
+            {images.length} images
           </p>
           <p className="text-sm text-zinc-400">
             Page {currentPage} of {totalPages}
@@ -209,42 +212,62 @@ export default function HistoryPage() {
 
                 <div className="flex flex-col gap-3">
                   <div>
-                    <p className="font-semibold text-sm text-zinc-300">Prompt:</p>
-                    <p className="text-sm text-zinc-400 mt-1 break-words">{selectedImage.prompt}</p>
+                    <p className="font-semibold text-sm text-zinc-300">
+                      Prompt:
+                    </p>
+                    <p className="text-sm text-zinc-400 mt-1 break-words">
+                      {selectedImage.prompt}
+                    </p>
                   </div>
 
                   {selectedImage.negativePrompt && (
                     <div>
-                      <p className="font-semibold text-sm text-zinc-300">Negative Prompt:</p>
-                      <p className="text-sm text-zinc-400 mt-1 break-words">{selectedImage.negativePrompt}</p>
+                      <p className="font-semibold text-sm text-zinc-300">
+                        Negative Prompt:
+                      </p>
+                      <p className="text-sm text-zinc-400 mt-1 break-words">
+                        {selectedImage.negativePrompt}
+                      </p>
                     </div>
                   )}
 
                   {selectedImage.colorScheme && (
                     <div>
-                      <p className="font-semibold text-sm text-zinc-300">Color Scheme:</p>
-                      <p className="text-sm text-zinc-400 mt-1">{selectedImage.colorScheme}</p>
+                      <p className="font-semibold text-sm text-zinc-300">
+                        Color Scheme:
+                      </p>
+                      <p className="text-sm text-zinc-400 mt-1">
+                        {selectedImage.colorScheme}
+                      </p>
                     </div>
                   )}
 
                   <div>
-                    <p className="font-semibold text-sm text-zinc-300">Aspect Ratio:</p>
+                    <p className="font-semibold text-sm text-zinc-300">
+                      Aspect Ratio:
+                    </p>
                     <p className="text-sm text-zinc-400 mt-1">
                       {selectedImage.aspectRatio === "landscape 1920x1080"
                         ? "Landscape"
                         : selectedImage.aspectRatio === "portrait 512x1024"
-                          ? "Portrait"
-                          : "Square"}
+                        ? "Portrait"
+                        : "Square"}
                     </p>
                   </div>
 
                   <div>
-                    <p className="font-semibold text-sm text-zinc-300">Guidance Scale:</p>
-                    <p className="text-sm text-zinc-400 mt-1">{selectedImage.guidanceScale}</p>
+                    <p className="font-semibold text-sm text-zinc-300">
+                      Guidance Scale:
+                    </p>
+                    <p className="text-sm text-zinc-400 mt-1">
+                      {selectedImage.guidanceScale}
+                    </p>
                   </div>
 
                   <div>
-                    <p className="font-semibold text-sm text-zinc-300">Created At:</p>
+                    <p className="font-semibold text-sm text-zinc-300">
+                      Created At:
+                    </p>
                     <p className="text-sm text-zinc-400 mt-1">
                       {new Date(selectedImage.createdAt).toLocaleString()}
                     </p>
@@ -256,7 +279,9 @@ export default function HistoryPage() {
                 {/* Actions */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleDownload(selectedImage.url, selectedImage.prompt)}
+                    onClick={() =>
+                      handleDownload(selectedImage.url, selectedImage.prompt)
+                    }
                     className="btn btn-primary btn-sm flex-1"
                   >
                     Download
