@@ -1,6 +1,8 @@
+
 import { SignUp } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+
 
 export default async function HistoryPage() {
   const { userId } = await auth();
@@ -8,8 +10,9 @@ export default async function HistoryPage() {
   if (userId) redirect(`/history/${userId}`);
 
   return (
-    <div className="flex flex-col h-full items-center justify-center">
+    <div className="flex justify-center items-center h-full">
       <SignUp />
     </div>
   );
+
 }

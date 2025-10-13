@@ -1,7 +1,9 @@
+
+
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import { HammerIcon, Layers2Icon } from "lucide-react";
+import { HammerIcon, Layers2Icon, CreditCardIcon, ChartPieIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
@@ -22,12 +24,17 @@ const NavContext = createContext<NavContextType | null>(null);
 
 export function NavProvider({ children }: { children: ReactNode }) {
 	const pathname = usePathname();
-	const { user } = useUser();
+	const { user, isSignedIn } = useUser();
 
-	const navLinks = [
+	const baseNavLinks = [
 		{ label: "generate", href: "/generate", icon: HammerIcon },
 		{ label: "history", href: user?.id ? `/history/${user.id}` : "/history", icon: Layers2Icon },
+		{ label: "pricing", href: "/pricing", icon: ChartPieIcon }
 	];
+
+	const navLinks = isSignedIn
+		? [...baseNavLinks, { label: "billing", href: "/billing", icon: CreditCardIcon }]
+		: baseNavLinks;
 
 	const isActive = (href: string) => pathname === href;
 
