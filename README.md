@@ -2,7 +2,7 @@
 
 Link: https://imagic-eight.vercel.app
 
-<img src="./public/imagic-preview.png" alt="Imagic AI Image Generation" width="768" height="auto">
+<img src="./public/imagic.png" alt="Imagic AI Image Generation" width="768" height="auto">
 
 ## Project Purpose
 
