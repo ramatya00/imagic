@@ -15,7 +15,7 @@ export async function generateImage({ prompt, negativePrompt, colorScheme, aspec
 
 		// Generate the image
 		const response = await genai.models.generateContent({
-			model: "gemini-2.0-flash-exp-image-generation",
+			model: "gemini-2.0-flash-preview-image-generation",
 			config: {
 				safetySettings: [
 					{
