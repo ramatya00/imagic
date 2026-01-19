@@ -6,7 +6,7 @@ Link: https://imagic-eight.vercel.app
 
 ## Project Purpose
 
-AI powered image generation platform that enables users to create stunning images through natural language prompts. Imagic leverages Google's Gemini 2.0 image generation model to transform text descriptions into high-quality visual content, providing an intuitive interface for users to bring their creative ideas to life using conversational AI.
+AI powered image generation platform that enables users to create stunning images through natural language prompts. Imagic leverages OpenAI's DALL-E 2 to transform text descriptions into high-quality visual content, providing an intuitive interface for users to bring their creative ideas to life using conversational AI.
 
 ## Tech Stack
 
@@ -15,7 +15,7 @@ AI powered image generation platform that enables users to create stunning image
 - **Authentication:** Clerk
 - **Database:** Prisma ORM with PostgreSQL
 - **Billing:** Stripe Checkout & Webhooks
-- **AI Integration:** Google Gemini 2.0 Flash Image Generation
+- **AI Integration:** OpenAI DALL-E 2 Image Generation
 - **Image Storage:** ImageKit
 - **State Management:** TanStack Query
 - **Form Handling:** React Hook Form with Zod validation
@@ -28,12 +28,16 @@ AI powered image generation platform that enables users to create stunning image
 - Guest mode with limited generations for trial users
 - Persistent user sessions and data
 - User profile management
-- Credit-Based System
+
+### Credit-Based System
+
 - Flexible credit packages for image generations
 - Subscription options for unlimited access
 - Purchase history tracking
 - Automatic credit allocation after successful payments
-- Image History & Management
+
+### Image History & Management
+
 - Complete generation history for authenticated users
 - Detailed image metadata (prompts, settings, creation date)
 - Image download and sharing capabilities
@@ -41,18 +45,18 @@ AI powered image generation platform that enables users to create stunning image
 
 ### Customization Options
 
-- Multiple aspect ratios (landscape, portrait, square)
 - Color scheme selection (minimalist, vibrant, monochrome, etc.)
 - Negative prompt support for avoiding unwanted elements
 - Guidance scale adjustment for creative control
+- High-quality 512x512 image generation
 
 ## Technical Features
 
 ### AI Integration
 
-- **Gemini 2.0 Integration:** Leverages Google's image generation model
+- **DALL-E 2 Integration:** Leverages OpenAI's efficient image generation model
 - **Advanced Prompting:** Structured prompt engineering for optimal results
-- **Safety Settings:** Configurable content filters and safety thresholds
+- **Cost-Effective:** Uses DALL-E 2 for affordable, high-quality generation
 - **Error Handling:** Robust error handling for generation failures
 
 ### Backend Architecture
@@ -87,10 +91,10 @@ AI powered image generation platform that enables users to create stunning image
 
 ### AI Integration
 
-- Google Gemini 2.0 API integration
+- OpenAI DALL-E 2 API integration
 - Image generation workflow development
 - ImageKit integration for image storage and delivery
-- Safety filtering and content moderation
+- Error handling and rate limiting
 
 ### Core Features Implementation
 
@@ -138,7 +142,7 @@ src/
 │   └── ui/                 # UI utility components
 ├── lib/                    # Utility libraries and configurations
 │   ├── constants.ts        # Application constants
-│   ├── gemini.ts           # Gemini AI integration
+│   ├── ai-model.ts         # OpenAI DALL-E 2 integration
 │   ├── imagekit.ts         # ImageKit configuration
 │   ├── prisma.ts           # Prisma client configuration
 │   ├── stripe.ts           # Stripe configuration
@@ -152,7 +156,7 @@ src/
 
 - Node.js 18+ and npm
 - PostgreSQL database
-- Google Gemini API key
+- OpenAI API key
 - ImageKit account
 - Stripe account
 - Clerk account
@@ -179,6 +183,37 @@ cp .env.example .env.local
 # Fill in your environment variables
 ```
 
+Required environment variables:
+
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/imagic"
+
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
+CLERK_SECRET_KEY="sk_test_..."
+
+# OpenAI
+OPENAI_API_KEY="sk-proj-..."
+
+# ImageKit
+NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY="your_public_key"
+IMAGEKIT_PRIVATE_KEY="your_private_key"
+NEXT_PUBLIC_IMAGEKIT_ENDPOINT="https://ik.imagekit.io/yourid"
+
+# Stripe
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
+STRIPE_WEBHOOK_SECRET="whsec_..."
+STRIPE_STARTER_PRICE_ID="price_..."
+STRIPE_CREATOR_PRICE_ID="price_..."
+STRIPE_PROFESSIONAL_PRICE_ID="price_..."
+STRIPE_UNLIMITED_PRICE_ID="price_..."
+
+# Application
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
 4. Set up the database
 
 ```bash
@@ -193,3 +228,18 @@ npm run dev
 ```
 
 6. Open http://localhost:3000 in your browser
+
+## API Costs
+
+- **DALL-E 2 (512x512):** ~$0.018 per image
+- Approximately 55 images per $1
+- Cost-effective solution for high-volume generation
+
+## Future Enhancements
+
+- Multiple image size options (256x256, 1024x1024)
+- Image editing and variations
+- Batch generation capabilities
+- Advanced filtering and search in history
+- Social sharing features
+- API access for developers
